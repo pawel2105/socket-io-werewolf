@@ -5,439 +5,232 @@
   <title>One night werewolf</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.css"/>
   <script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.js"></script>
+  <script type="text/javascript" src='game.js'></script>
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.css"/>
 </head>
 <body>
-<!-- Start of first page -->
-<div data-role="page" id="start">
+  <!-- Start of first page -->
+  <div data-role="page" id="start">
 
-  <div data-role="header">
-    <h1>Welcome</h1>
+    <div data-role="header">
+      <h1>Welcome</h1>
+    </div>
+    <!-- /header -->
+
+    <div role="main" class="ui-content">
+      <form id="new_game">
+        <label for="new_game_name">Name</label>
+        <input id="new_game_name" name='name'>
+        <button>New Game</button>
+      </form>
+      <br/>
+
+      <form id="join">
+        <label for="join_name">Name</label>
+        <input id="join_name" name='name'>
+        <label for="join_number">Game Number</label>
+        <input id="join_number" type="number">
+        <button>Join</button>
+      </form>
+    </div>
+    <!-- /content -->
   </div>
-  <!-- /header -->
+  <!-- /page -->
 
-  <div role="main" class="ui-content">
-    <form id="new_game">
-      <label for="new_game_name">Name</label>
-      <input id="new_game_name" name='name'>
-      <button>New Game</button>
-    </form>
-    <br/>
+  <!-- Start of second page -->
+  <div data-role="page" id="play">
 
-    <form id="join">
-      <label for="join_name">Name</label>
-      <input id="join_name" name='name'>
-      <label for="join_number">Game Number</label>
-      <input id="join_number" type="number">
-      <button>Join</button>
-    </form>
+    <div data-role="header">
+      <h1>Welcome to Game</h1>
+    </div>
+    <!-- /header -->
+
+    <div role="main" class="ui-content">
+      <h2>Players</h2>
+      <ul id="players_names">
+        <li>You</li>
+      </ul>
+      <form class="ready player">
+        <button>Ready</button>
+      </form>
+      <form class="next-phase host">
+        <button>Next Phase</button>
+      </form>
+    </div>
+    <!-- /content -->
   </div>
-  <!-- /content -->
-</div>
-<!-- /page -->
+  <!-- /page -->
 
-<!-- Start of second page -->
-<div data-role="page" id="play">
+  <!-- Start of second page -->
+  <div data-role="page" id="play_night">
 
-  <div data-role="header">
-    <h1>Welcome to Game</h1>
+    <div data-role="header">
+      <h1>Welcome to Game</h1>
+    </div>
+    <!-- /header -->
+
+    <div role="main" class="ui-content">
+      <h2>Night Phase</h2>
+      <p class="your-role"></p>
+
+      <form id="play_action">
+        <div class="roles role-seer">
+          <label for="look_at_select">Look At</label>
+          <select id="look_at_select" name="look_at" class="name-options"></select>
+          <button>Look</button>
+        </div>
+        <div class="roles role-robber">
+          <label for="look_at_select">Rob</label>
+          <select id="rob_select" name="rob" class="name-options"></select>
+          <button>Steal</button>
+        </div>
+        <div class="roles role-troublemaker">
+          <label for="troublemaker_swap1">Swap</label>
+          <select id="troublemaker_swap1" name="swap1" class="name-options"></select>
+          <select id="troublemaker_swap2" name="swap2" class="name-options"></select>
+          <button>Swap</button>
+        </div>
+        <div class="roles role-werewolf role-minion">
+          <label for="puppy_crash">Puppy Crash on</label>
+          <select id="puppy_crash" name="puppy-crash" class="name-options"></select>
+          <button>Kiss</button>
+        </div>
+        <div class="roles role-tanner">
+          <label for="kill_him">Course of Misery</label>
+          <select id="kill_him" name="kill_him" class="name-options"></select>
+          <button>Bastard</button>
+        </div>
+        <div class="roles role-mason">
+          <label for="mason_him">Consider for Masonary</label>
+          <select id="mason_him" name="mason_him" class="name-options"></select>
+          <button>Masonize</button>
+        </div>
+        <div class="roles role-drunk">
+          <label for="drunk_him">Select Sponser</label>
+          <select id="drunk_him" name="drunk_him" class="name-options"></select>
+          <button>Help me</button>
+        </div>
+        <div class="roles role-insomanic">
+          <label for="insomanick_him">Find a Dealer</label>
+          <select id="insomanick_him" name="insomanick_him" class="name-options"></select>
+          <button>Buy</button>
+        </div>
+        <div class="roles role-hunter">
+          <label for="hunter_him">Needs to die</label>
+          <select id="hunter_him" name="hunter_him" class="name-options"></select>
+          <button>Shoot</button>
+        </div>
+        <div class="roles role-villager">
+          <label for="hunter_villager">Your Friend</label>
+          <select id="hunter_villager" name="hunter_villager" class="name-options"></select>
+          <button>Befriend</button>
+        </div>
+      </form>
+      <form class="ready player">
+        <button>Ready</button>
+      </form>
+      <form class="next-phase host">
+        <button>Next Phase</button>
+      </form>
+    </div>
+    <!-- /content -->
   </div>
-  <!-- /header -->
+  <!-- /page -->
 
-  <div role="main" class="ui-content">
-    <h2>Players</h2>
-    <ul id="players_names">
-      <li>You</li>
-    </ul>
-    <form class="ready player">
-      <button>Ready</button>
-    </form>
-    <form class="next-phase host">
-      <button>Next Phase</button>
-    </form>
-  </div>
-  <!-- /content -->
-</div>
-<!-- /page -->
+  <!-- Start of second page -->
+  <div data-role="page" id="play_day">
 
-<!-- Start of second page -->
-<div data-role="page" id="play_night">
+    <div data-role="header">
+      <h1>Welcome to Game</h1>
+    </div>
+    <!-- /header -->
 
-  <div data-role="header">
-    <h1>Welcome to Game</h1>
-  </div>
-  <!-- /header -->
-
-  <div role="main" class="ui-content">
-    <h2>Night Phase</h2>
-    <p class="your-role"></p>
-
-    <form id="play_action">
-      <div class="roles role-seer">
-        <label for="look_at_select">Look At</label>
-        <select id="look_at_select" name="look_at" class="name-options"></select>
-        <button>Look</button>
-      </div>
-      <div class="roles role-robber">
-        <label for="look_at_select">Rob</label>
-        <select id="rob_select" name="rob" class="name-options"></select>
-        <button>Steal</button>
-      </div>
-      <div class="roles role-troublemaker">
-        <label for="troublemaker_swap1">Swap</label>
-        <select id="troublemaker_swap1" name="swap1" class="name-options"></select>
-        <select id="troublemaker_swap2" name="swap2" class="name-options"></select>
-        <button>Swap</button>
-      </div>
-      <div class="roles role-werewolf role-minion">
-        <label for="puppy_crash">Puppy Crash on</label>
-        <select id="puppy_crash" name="puppy-crash" class="name-options"></select>
-        <button>Kiss</button>
-      </div>
-      <div class="roles role-tanner">
-        <label for="kill_him">Course of Misery</label>
-        <select id="kill_him" name="kill_him" class="name-options"></select>
-        <button>Bastard</button>
+    <div role="main" class="ui-content">
+      <h2>Day Phase</h2>
+      <p class="your-role"></p>
+      <p class="roles role-seer you-saw"></p>
+      <p class="roles role-robber you-stole"></p>
+      <p class="roles role-troublemaker you-swapped"></p>
+      <div class="roles role-werewolf role-minion ">
+        The Werewolves:
+        <ul id="the-werewolves"></ul>
       </div>
       <div class="roles role-mason">
-        <label for="mason_him">Consider for Masonary</label>
-        <select id="mason_him" name="mason_him" class="name-options"></select>
-        <button>Masonize</button>
+        The Masons:
+        <ul id="the-masons"></ul>
       </div>
-      <div class="roles role-drunk">
-        <label for="drunk_him">Select Sponser</label>
-        <select id="drunk_him" name="drunk_him" class="name-options"></select>
-        <button>Help me</button>
-      </div>
-      <div class="roles role-insomanic">
-        <label for="insomanick_him">Find a Dealer</label>
-        <select id="insomanick_him" name="insomanick_him" class="name-options"></select>
-        <button>Buy</button>
-      </div>
-      <div class="roles role-hunter">
-        <label for="hunter_him">Needs to die</label>
-        <select id="hunter_him" name="hunter_him" class="name-options"></select>
-        <button>Shoot</button>
-      </div>
-      <div class="roles role-villager">
-        <label for="hunter_villager">Your Friend</label>
-        <select id="hunter_villager" name="hunter_villager" class="name-options"></select>
-        <button>Befriend</button>
-      </div>
-    </form>
-    <form class="ready player">
-      <button>Ready</button>
-    </form>
-    <form class="next-phase host">
-      <button>Next Phase</button>
-    </form>
-  </div>
-  <!-- /content -->
-</div>
-<!-- /page -->
 
-<!-- Start of second page -->
-<div data-role="page" id="play_day">
-
-  <div data-role="header">
-    <h1>Welcome to Game</h1>
-  </div>
-  <!-- /header -->
-
-  <div role="main" class="ui-content">
-    <h2>Day Phase</h2>
-    <p class="your-role"></p>
-    <p class="roles role-seer you-saw"></p>
-    <p class="roles role-robber you-stole"></p>
-    <p class="roles role-troublemaker you-swapped"></p>
-    <div class="roles role-werewolf role-minion ">
-      The Werewolves:
-      <ul id="the-werewolves"></ul>
+      <form class="ready player">
+        <button>Ready</button>
+      </form>
+      <form class="next-phase host">
+        <button>Next Phase</button>
+      </form>
     </div>
-    <div class="roles role-mason">
-      The Masons:
-      <ul id="the-masons"></ul>
+    <!-- /content -->
+  </div>
+  <!-- /page -->
+
+  <!-- Start of second page -->
+  <div data-role="page" id="play_voting">
+
+    <div data-role="header">
+      <h1>Welcome to Game</h1>
     </div>
+    <!-- /header -->
 
-    <form class="ready player">
-      <button>Ready</button>
-    </form>
-    <form class="next-phase host">
-      <button>Next Phase</button>
-    </form>
+    <div role="main" class="ui-content">
+      <h2>Voting Phase</h2>
+      <p class="your-role"></p>
+
+      <form id="vote">
+        <label for="vote_for">Vote For</label>
+        <select id="vote_for" name="vote_for" class="name-options">
+
+        </select>
+        <button>Submit Vote</button>
+      </form>
+      <form class="ready player">
+        <button>Ready</button>
+      </form>
+      <form class="next-phase host">
+        <button>Next Phase</button>
+      </form>
+    </div>
+    <!-- /content -->
   </div>
-  <!-- /content -->
-</div>
-<!-- /page -->
+  <!-- /page -->
 
-<!-- Start of second page -->
-<div data-role="page" id="play_voting">
+  <!-- Start of second page -->
+  <div data-role="page" id="play_done">
 
-  <div data-role="header">
-    <h1>Welcome to Game</h1>
+    <div data-role="header">
+      <h1>Welcome to Game</h1>
+    </div>
+    <!-- /header -->
+
+    <div role="main" class="ui-content">
+      <h2>Game Done</h2>
+      Winners:
+      <ul id="the_winners"></ul>
+      Results:
+      <table data-role="table" data-mode="columntoggle" id="winners_table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Voted For</th>
+            <th>Votes</th>
+          </tr>
+        </thead>
+        <tbody id="final_results">
+
+        </tbody>
+      </table>
+    </div>
+    <!-- /content -->
   </div>
-  <!-- /header -->
-
-  <div role="main" class="ui-content">
-    <h2>Voting Phase</h2>
-    <p class="your-role"></p>
-
-    <form id="vote">
-      <label for="vote_for">Vote For</label>
-      <select id="vote_for" name="vote_for" class="name-options">
-
-      </select>
-      <button>Submit Vote</button>
-    </form>
-    <form class="ready player">
-      <button>Ready</button>
-    </form>
-    <form class="next-phase host">
-      <button>Next Phase</button>
-    </form>
-  </div>
-  <!-- /content -->
-</div>
-<!-- /page -->
-
-<!-- Start of second page -->
-<div data-role="page" id="play_done">
-
-  <div data-role="header">
-    <h1>Welcome to Game</h1>
-  </div>
-  <!-- /header -->
-
-  <div role="main" class="ui-content">
-    <h2>Game Done</h2>
-    Winners:
-    <ul id="the_winners"></ul>
-    Results:
-    <table data-role="table" data-mode="columntoggle" id="winners_table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Role</th>
-          <th>Voted For</th>
-          <th>Votes</th>
-        </tr>
-      </thead>
-      <tbody id="final_results">
-
-      </tbody>
-    </table>
-  </div>
-  <!-- /content -->
-</div>
-<!-- /page -->
-
-<script type="application/javascript">
-  var $current_game, $current_player, $last_phase;
-
-  function change_to_new() {
-    $("h1").text($current_game.id + ' : ' + $current_player.name)
-    $.mobile.changePage("#play", { transition: "slideup", changeHash: false });
-  }
-
-  function change_to_night() {
-    $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + ".json").done(function (player_data) {
-      $current_player = player_data;
-      if($current_player.doppel_role) {
-        $(".your-role").text('You are the Doppel ' + $current_player.doppel_role)
-      } else {
-        $(".your-role").text('You are the ' + $current_player.role)
-      }
-      $('.roles').hide();
-      $('.role-' + $current_player.role).show();
-      $('.role-' + $current_player.doppel_role).show();
-      $('.name-options').empty();
-      $('.name-options').append('<option></option>');
-      for (var i = 0; i < $current_game.players.length; i++) {
-        $('.name-options').append('<option>' + $current_game.players[i].name + '</option>')
-      }
-      $.mobile.changePage("#play_night", { transition: "slideup", changeHash: false });
-    });
-  }
-
-  function change_to_day() {
-    $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + ".json").done(function (player_data) {
-      $current_player = player_data;
-      if($current_player.saw) {
-        $(".you-saw").text('You saw that ' + $current_player.looked_at + ' is the ' + $current_player.saw)
-      }
-      if($current_player.stole) {
-        $(".you-stole").text('You stole ' + $current_player.stole + ' role of ' + $current_player.stolen_role)
-      }
-      if($current_player.swapped) {
-        $(".you-swapped").text('You swapped ' + $current_player.swapped)
-      }
-      $('#the-werewolves').empty();
-      if($current_player.werewolves) {
-        for (var i = 0; i < $current_player.werewolves.length; i++) {
-          $('#the-werewolves').append('<li>' + $current_player.werewolves[i] + '</li>')
-        }
-        if($current_player.werewolves.length === 0) {
-          $('#the_winners').append('<li>No werewolves</li>')
-        }
-      }
-      $('#the-masons').empty();
-      if($current_player.masons) {
-        for (var i = 0; i < $current_player.masons.length; i++) {
-          $('#the-masons').append('<li>' + $current_player.masons[i] + '</li>')
-        }
-      }
-      if($current_player.current_role) {
-        if($current_player.current_role == $current_player.role) {
-          $(".you-role").text('You are still the ' + $current_player.current_role)
-        } else {
-          $(".you-role").text('You are now the ' + $current_player.current_role)
-        }
-      }
-      $.mobile.changePage("#play_day", { transition: "slideup", changeHash: false });
-    });
-  }
-
-  function change_to_voting() {
-    $.mobile.changePage("#play_voting", { transition: "slideup", changeHash: false });
-  }
-
-  function change_to_done() {
-    $('#the_winners').empty();
-    for (var i = 0; i < $current_game.winners.length; i++) {
-      winner = $current_game.winners[i]
-      $('#the_winners').append('<li>' + winner + '</li>')
-    }
-    if($current_game.winners.length === 0) {
-      $('#the_winners').append('<li>No Winners</li>')
-    }
-    $('#final_results').empty();
-    for (var i = 0; i < $current_game.players.length; i++) {
-      player = $current_game.players[i]
-      $('#final_results').append('<tr>' +
-        '<td>' + player.name + '</td>' +
-        '<td>' + player.role + '</td>' +
-        '<td>' + player.voted_for + '</td>' +
-        '<td>' + player.votes_against + '</td>' +
-        '</tr>')
-    }
-    $.mobile.changePage("#play_done", { transition: "slideup", changeHash: false });
-  }
-
-  function check_phase() {
-    if($last_phase !== $current_game.state) {
-      $last_phase = $current_game.state;
-      if($current_game.state === 'new') {
-        change_to_new();
-      }
-      if($current_game.state === 'night') {
-        change_to_night();
-      }
-      if ($current_game.state === 'day') {
-        change_to_day();
-      }
-      if ($current_game.state === 'voting') {
-        change_to_voting();
-      }
-      if ($current_game.state === 'done') {
-        change_to_done();
-      }
-    } else {
-      $.mobile.loading( "hide" );
-    }
-
-    if($current_game.state == 'new') {
-      $('#players_names').empty();
-      for (var i = 0; i < $current_game.players.length; i++) {
-        $('#players_names').append('<li>' + $current_game.players[i].name + '</li>')
-      }
-    }
-  }
-
-  $(document).ready(function () {
-    $('#new_game').submit(function (e) {
-      e.preventDefault();
-      $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games.json").done(function (data) {
-        $current_game = data;
-        $('.player').hide();
-        $('.host').show();
-        $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players.json",
-          { 'name': $('#new_game_name').val() }).done(function (player_data) {
-            $current_player = player_data;
-            check_phase();
-          });
-      });
-    });
-
-    $('#join').submit(function (e) {
-      e.preventDefault();
-      $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $('#join_number').val() + ".json").done(function (data) {
-        $current_game = data;
-        $('.player').show();
-        $('.host').hide();
-        $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players.json",
-          { 'name': $('#join_name').val() }).done(function (player_data) {
-            $current_player = player_data;
-            check_phase();
-          });
-      });
-    });
-
-    $('.next-phase').submit(function (e) {
-      e.preventDefault();
-      $.mobile.loading( "show", {
-        text: "Loading",
-        textVisible: true,
-        theme: "a",
-        html: ""
-      });
-
-      $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/next-phase.json").done(function (data) {
-        $current_game = data;
-        check_phase();
-      });
-    });
-
-    $('.ready').submit(function (e) {
-      e.preventDefault();
-      $.mobile.loading( "show", {
-        text: "Checking",
-        textVisible: true,
-        theme: "a",
-        html: ""
-      });
-
-      $.ajax({url: "http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json", cache: false}).done(function (data) {
-        $current_game = data;
-        check_phase();
-      });
-    });
-
-    $('#play_action').submit(function (e) {
-      e.preventDefault();
-      var params = {};
-      if ($current_player.role == 'seer') {
-        params = {look_at: $('#look_at_select').val()}
-      }
-      if ($current_player.role == 'robber') {
-        params = {rob: $('#rob_select').val()}
-      }
-      if ($current_player.role == 'troublemaker') {
-        params = {swap: $('#troublemaker_swap1').val() + "," + $('#troublemaker_swap2').val() }
-      }
-      $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + "/play-action.json",params).done(function (data) {
-        $('#play_action').hide();
-      });
-    });
-
-    $('#vote').submit(function (e) {
-      e.preventDefault();
-      var params = {name: $('#vote_for').val()};
-      $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + "/votes.json",params).done(function (data) {
-        $('#vote').hide();
-      });
-    });
-  });
-</script>
+  <!-- /page -->
 </body>
 </html>
