@@ -239,6 +239,9 @@
         for (var i = 0; i < $current_player.werewolves.length; i++) {
           $('#the-werewolves').append('<li>' + $current_player.werewolves[i] + '</li>')
         }
+        if($current_player.werewolves.length === 0) {
+          $('#the_winners').append('<li>No werewolves</li>')
+        }
       }
       if($current_player.masons) {
         for (var i = 0; i < $current_player.masons.length; i++) {
@@ -264,6 +267,9 @@
     for (var i = 0; i < $current_game.winners.length; i++) {
       winner = $current_game.winners[i]
       $('#the_winners').append('<li>' + winner + '</li>')
+    }
+    if($current_game.winners.length === 0) {
+      $('#the_winners').append('<li>No Winners</li>')
     }
     for (var i = 0; i < $current_game.players.length; i++) {
       player = $current_game.players[i]
@@ -295,6 +301,8 @@
       if ($current_game.state === 'done') {
         change_to_done();
       }
+    } else {
+      $.mobile.loading( "hide" );
     }
 
     if($current_game.state == 'new') {
@@ -336,6 +344,12 @@
 
     $('.next-phase').submit(function (e) {
       e.preventDefault();
+      $.mobile.loading( "show", {
+        text: "Loading",
+        textVisible: true,
+        theme: "a",
+        html: ""
+      });
 
       $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/next-phase.json").done(function (data) {
         $current_game = data;
@@ -345,7 +359,14 @@
 
     $('.ready').submit(function (e) {
       e.preventDefault();
-      $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json").done(function (data) {
+      $.mobile.loading( "show", {
+        text: "Checking",
+        textVisible: true,
+        theme: "a",
+        html: ""
+      });
+
+      $.ajax({url: "http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json", cache: false}).done(function (data) {
         $current_game = data;
         check_phase();
       });
