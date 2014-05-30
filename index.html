@@ -186,7 +186,7 @@
     <form id="vote">
       <label for="vote_for">Vote For</label>
       <select id="vote_for" name="vote_for" class="name-options">
-        <option>Abstain</option>
+
       </select>
       <button>Submit Vote</button>
     </form>
@@ -252,6 +252,7 @@
       $('.role-' + $current_player.role).show();
       $('.role-' + $current_player.doppel_role).show();
       $('.name-options').empty();
+      $('.name-options').append('<option></option>');
       for (var i = 0; i < $current_game.players.length; i++) {
         $('.name-options').append('<option>' + $current_game.players[i].name + '</option>')
       }
