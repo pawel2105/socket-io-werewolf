@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Werewolf Api Tester</title>
+  <title>One night werewolf</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.css"/>
@@ -232,8 +232,11 @@
 
     $('.next-phase').submit(function (e) {
       e.preventDefault();
+      $(this).attr("disabled", "disabled");
+
       $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/next-phase.json").done(function (data) {
         $current_game = data;
+        $('.next-phase').removeAttr("disabled");
       });
     });
 
