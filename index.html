@@ -50,7 +50,7 @@
     <ul id="players_names">
       <li>You</li>
     </ul>
-    <form id="ready_for_night">
+    <form class="ready player">
       <button>Ready</button>
     </form>
     <form class="next-phase host">
@@ -91,7 +91,7 @@
         <button>Swap</button>
       </div>
     </form>
-    <form id="ready_for_day">
+    <form class="ready player">
       <button>Ready</button>
     </form>
     <form class="next-phase host">
@@ -125,8 +125,7 @@
       <ul id="the-masons"></ul>
     </div>
 
-
-    <form id="ready_for_voting">
+    <form class="ready player">
       <button>Ready</button>
     </form>
     <form class="next-phase host">
@@ -156,7 +155,7 @@
       </select>
       <button>Vote</button>
     </form>
-    <form id="ready_for_done">
+    <form class="ready player">
       <button>Ready</button>
     </form>
     <form class="next-phase host">
@@ -180,7 +179,7 @@
     Winners:
     <ul id="the_winners"></ul>
     Results:
-    <table data-role="table" data-mode="columntoggle">
+    <table data-role="table">
       <thead>
         <tr>
           <th>Name</th>
@@ -199,19 +198,124 @@
 <!-- /page -->
 
 <script type="application/javascript">
-  var $current_game, $current_player;
+  var $current_game, $current_player, $last_phase;
+
+  function change_to_new() {
+    $("h1").text($current_player.name + ' -> Game ' + $current_game.id)
+    $.mobile.changePage("#play", { transition: "slideup", changeHash: false });
+  }
+
+  function change_to_night() {
+    $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + ".json").done(function (player_data) {
+      $current_player = player_data;
+      if($current_player.doppel_role) {
+        $(".your-role").text('You are the Doppel ' + $current_player.doppel_role)
+      } else {
+        $(".your-role").text('You are the ' + $current_player.role)
+      }
+      $('.roles').hide();
+      $('.role-' + $current_player.role).show();
+      $('.role-' + $current_player.doppel_role).show();
+      for (var i = 0; i < $current_game.players.length; i++) {
+        $('.name-options').append('<option>' + $current_game.players[i].name + '</option>')
+      }
+      $.mobile.changePage("#play_night", { transition: "slideup", changeHash: false });
+    });
+  }
+
+  function change_to_day() {
+    $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + ".json").done(function (player_data) {
+      $current_player = player_data;
+      if($current_player.saw) {
+        $(".you-saw").text('You saw that ' + $current_player.looked_at + ' is the ' + $current_player.saw)
+      }
+      if($current_player.stole) {
+        $(".you-stole").text('You stole ' + $current_player.stole + ' role of ' + $current_player.stolen_role)
+      }
+      if($current_player.swapped) {
+        $(".you-swapped").text('You swapped ' + $current_player.swapped)
+      }
+      if($current_player.werewolves) {
+        for (var i = 0; i < $current_player.werewolves.length; i++) {
+          $('#the-werewolves').append('<li>' + $current_player.werewolves[i] + '</li>')
+        }
+      }
+      if($current_player.masons) {
+        for (var i = 0; i < $current_player.masons.length; i++) {
+          $('#the-masons').append('<li>' + $current_player.masons[i] + '</li>')
+        }
+      }
+      if($current_player.current_role) {
+        if($current_player.current_role == $current_player.role) {
+          $(".you-role").text('You are still the ' + $current_player.current_role)
+        } else {
+          $(".you-role").text('You are now the ' + $current_player.current_role)
+        }
+      }
+      $.mobile.changePage("#play_day", { transition: "slideup", changeHash: false });
+    });
+  }
+
+  function change_to_voting() {
+    $.mobile.changePage("#play_voting", { transition: "slideup", changeHash: false });
+  }
+
+  function change_to_done() {
+    for (var i = 0; i < $current_game.winners.length; i++) {
+      winner = $current_game.winners[i]
+      $('#the_winners').append('<li>' + winner + '</li>')
+    }
+    for (var i = 0; i < $current_game.players.length; i++) {
+      player = $current_game.players[i]
+      $('#final_results').append('<tr>' +
+        '<td>' + player.name + '</td>' +
+        '<td>' + player.role + '</td>' +
+        '<td>' + player.voted_for + '</td>' +
+        '<td>' + player.votes_against + '</td>' +
+        '</tr>')
+    }
+    $.mobile.changePage("#play_done", { transition: "slideup", changeHash: false });
+  }
+
+  function check_phase() {
+    if($last_phase !== $current_game.state) {
+      $last_phase = $current_game.state;
+      if($current_game.state === 'new') {
+        change_to_new();
+      }
+      if($current_game.state === 'night') {
+        change_to_night();
+      }
+      if ($current_game.state === 'day') {
+        change_to_day();
+      }
+      if ($current_game.state === 'voting') {
+        change_to_voting();
+      }
+      if ($current_game.state === 'done') {
+        change_to_done();
+      }
+    }
+
+    if($current_game.state == 'new') {
+      $('#players_names').empty();
+      for (var i = 0; i < $current_game.players.length; i++) {
+        $('#players_names').append('<li>' + $current_game.players[i].name + '</li>')
+      }
+    }
+  }
 
   $(document).ready(function () {
     $('#new_game').submit(function (e) {
       e.preventDefault();
       $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games.json").done(function (data) {
         $current_game = data;
+        $('.player').hide();
         $('.host').show();
         $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players.json",
           { 'name': $('#new_game_name').val() }).done(function (player_data) {
             $current_player = player_data;
-            $("h1").text($current_player.name + ' -> Game ' + $current_game.id)
-            $.mobile.changePage("#play", { transition: "slideup", changeHash: false });
+            check_phase();
           });
       });
     });
@@ -220,52 +324,30 @@
       e.preventDefault();
       $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $('#join_number').val() + ".json").done(function (data) {
         $current_game = data;
+        $('.player').show();
         $('.host').hide();
         $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players.json",
           { 'name': $('#join_name').val() }).done(function (player_data) {
             $current_player = player_data;
-            $("h1").text($current_player.name + ' -> Game ' + $current_game.id)
-            $.mobile.changePage("#play", { transition: "slideup", changeHash: false });
+            check_phase();
           });
       });
     });
 
     $('.next-phase').submit(function (e) {
       e.preventDefault();
-      $(this).attr("disabled", "disabled");
 
       $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/next-phase.json").done(function (data) {
         $current_game = data;
-        $('.next-phase').removeAttr("disabled");
+        check_phase();
       });
     });
 
-    $('#ready_for_night').submit(function (e) {
+    $('.ready').submit(function (e) {
       e.preventDefault();
       $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json").done(function (data) {
         $current_game = data;
-        if ($current_game.state === 'new') {
-          $('#players_names').empty();
-          for (var i = 0; i < $current_game.players.length; i++) {
-            $('#players_names').append('<li>' + $current_game.players[i].name + '</li>')
-          }
-        } else {
-          $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + ".json").done(function (player_data) {
-            $current_player = player_data;
-            if($current_player.doppel_role) {
-              $(".your-role").text('You are the Doppel ' + $current_player.doppel_role)
-            } else {
-              $(".your-role").text('You are the ' + $current_player.role)
-            }
-            $('.roles').hide();
-            $('.role-' + $current_player.role).show();
-            $('.role-' + $current_player.doppel_role).show();
-            for (var i = 0; i < $current_game.players.length; i++) {
-              $('.name-options').append('<option>' + $current_game.players[i].name + '</option>')
-            }
-            $.mobile.changePage("#play_night", { transition: "slideup", changeHash: false });
-          });
-        }
+        check_phase();
       });
     });
 
@@ -286,84 +368,11 @@
       });
     });
 
-    $('#ready_for_day').submit(function (e) {
-      e.preventDefault();
-      $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json").done(function (data) {
-        $current_game = data;
-        if ($current_game.state === 'day') {
-          $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + ".json").done(function (player_data) {
-            $current_player = player_data;
-            if($current_player.saw) {
-              $(".you-saw").text('You saw that ' + $current_player.looked_at + ' is the ' + $current_player.saw)
-            }
-            if($current_player.stole) {
-              $(".you-stole").text('You stole ' + $current_player.stole + ' role of ' + $current_player.stolen_role)
-            }
-            if($current_player.swapped) {
-              $(".you-swapped").text('You swapped ' + $current_player.swapped)
-            }
-            if($current_player.werewolves) {
-              for (var i = 0; i < $current_player.werewolves.length; i++) {
-                $('#the-werewolves').append('<li>' + $current_player.werewolves[i] + '</li>')
-              }
-            }
-            if($current_player.masons) {
-              for (var i = 0; i < $current_player.masons.length; i++) {
-                $('#the-masons').append('<li>' + $current_player.masons[i] + '</li>')
-              }
-            }
-            if($current_player.current_role) {
-              if($current_player.current_role == $current_player.role) {
-                $(".you-role").text('You are still the ' + $current_player.current_role)
-              } else {
-                $(".you-role").text('You are now the ' + $current_player.current_role)
-              }
-            }
-            $.mobile.changePage("#play_day", { transition: "slideup", changeHash: false });
-          });
-        }
-      });
-    });
-
-    $('#ready_for_voting').submit(function (e) {;
-      e.preventDefault();
-      $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json").done(function (data) {
-        $current_game = data;
-        if ($current_game.state === 'voting') {
-          $.mobile.changePage("#play_voting", { transition: "slideup", changeHash: false });
-        }
-      });
-    });
-
     $('#vote').submit(function (e) {
       e.preventDefault();
       var params = {name: $('#vote_for').val()};
       $.post("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + "/players/" + $current_player.identifier + "/votes.json",params).done(function (data) {
         $('#vote').hide();
-      });
-    });
-
-    $('#ready_for_done').submit(function (e) {
-      var player;
-      e.preventDefault();
-      $.get("http://one-night-werewolf-api.quickapps.co.za/v1/games/" + $current_game.id + ".json").done(function (data) {
-        $current_game = data;
-        if ($current_game.state === 'done') {
-          for (var i = 0; i < $current_game.winners.length; i++) {
-            winner = $current_game.winners[i]
-            $('#the_winners').append('<li>' + winner + '</li>')
-          }
-          for (var i = 0; i < $current_game.players.length; i++) {
-            player = $current_game.players[i]
-            $('#final_results').append('<tr>' +
-              '<td>' + player.name + '</td>' +
-              '<td>' + player.role + '</td>' +
-              '<td>' + player.voted_for + '</td>' +
-              '<td>' + player.votes_against + '</td>' +
-              '</tr>')
-          }
-          $.mobile.changePage("#play_done", { transition: "slideup", changeHash: false });
-        }
       });
     });
   });
