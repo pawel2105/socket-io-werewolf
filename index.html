@@ -74,21 +74,56 @@
     <p class="your-role"></p>
 
     <form id="play_action">
-      <div id="seer_action" class="roles role-seer">
+      <div class="roles role-seer">
         <label for="look_at_select">Look At</label>
         <select id="look_at_select" name="look_at" class="name-options"></select>
         <button>Look</button>
       </div>
-      <div id="robber_action" class="roles role-robber">
+      <div class="roles role-robber">
         <label for="look_at_select">Rob</label>
         <select id="rob_select" name="rob" class="name-options"></select>
         <button>Steal</button>
       </div>
-      <div id="troublemaker_action" class="roles role-troublemaker">
+      <div class="roles role-troublemaker">
         <label for="troublemaker_swap1">Swap</label>
         <select id="troublemaker_swap1" name="swap1" class="name-options"></select>
         <select id="troublemaker_swap2" name="swap2" class="name-options"></select>
         <button>Swap</button>
+      </div>
+      <div class="roles role-werewolf role-minion">
+        <label for="puppy_crash">Puppy Crash on</label>
+        <select id="puppy_crash" name="puppy-crash" class="name-options"></select>
+        <button>Kiss</button>
+      </div>
+      <div class="roles role-tanner">
+        <label for="kill_him">Course of Misery</label>
+        <select id="kill_him" name="kill_him" class="name-options"></select>
+        <button>Bastard</button>
+      </div>
+      <div class="roles role-mason">
+        <label for="mason_him">Consider for Masonary</label>
+        <select id="mason_him" name="mason_him" class="name-options"></select>
+        <button>Masonize</button>
+      </div>
+      <div class="roles role-drunk">
+        <label for="drunk_him">Select Sponser</label>
+        <select id="drunk_him" name="drunk_him" class="name-options"></select>
+        <button>Help me</button>
+      </div>
+      <div class="roles role-insomanic">
+        <label for="insomanick_him">Find a Dealer</label>
+        <select id="insomanick_him" name="insomanick_him" class="name-options"></select>
+        <button>Buy</button>
+      </div>
+      <div class="roles role-hunter">
+        <label for="hunter_him">Needs to die</label>
+        <select id="hunter_him" name="hunter_him" class="name-options"></select>
+        <button>Shoot</button>
+      </div>
+      <div class="roles role-villager">
+        <label for="hunter_villager">Your Friend</label>
+        <select id="hunter_villager" name="hunter_villager" class="name-options"></select>
+        <button>Befriend</button>
       </div>
     </form>
     <form class="ready player">
@@ -216,6 +251,7 @@
       $('.roles').hide();
       $('.role-' + $current_player.role).show();
       $('.role-' + $current_player.doppel_role).show();
+      $('.name-options').empty();
       for (var i = 0; i < $current_game.players.length; i++) {
         $('.name-options').append('<option>' + $current_game.players[i].name + '</option>')
       }
@@ -235,6 +271,7 @@
       if($current_player.swapped) {
         $(".you-swapped").text('You swapped ' + $current_player.swapped)
       }
+      $('#the-werewolves').empty();
       if($current_player.werewolves) {
         for (var i = 0; i < $current_player.werewolves.length; i++) {
           $('#the-werewolves').append('<li>' + $current_player.werewolves[i] + '</li>')
@@ -243,6 +280,7 @@
           $('#the_winners').append('<li>No werewolves</li>')
         }
       }
+      $('#the-masons').empty();
       if($current_player.masons) {
         for (var i = 0; i < $current_player.masons.length; i++) {
           $('#the-masons').append('<li>' + $current_player.masons[i] + '</li>')
@@ -264,6 +302,7 @@
   }
 
   function change_to_done() {
+    $('#the_winners').empty();
     for (var i = 0; i < $current_game.winners.length; i++) {
       winner = $current_game.winners[i]
       $('#the_winners').append('<li>' + winner + '</li>')
@@ -271,6 +310,7 @@
     if($current_game.winners.length === 0) {
       $('#the_winners').append('<li>No Winners</li>')
     }
+    $('#final_results').empty();
     for (var i = 0; i < $current_game.players.length; i++) {
       player = $current_game.players[i]
       $('#final_results').append('<tr>' +
