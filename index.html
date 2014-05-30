@@ -179,12 +179,12 @@
     Winners:
     <ul id="the_winners"></ul>
     Results:
-    <table data-role="table">
+    <table data-role="table" data-mode="columntoggle" id="winners_table">
       <thead>
         <tr>
           <th>Name</th>
           <th>Role</th>
-          <th>Voted For</th>
+          <th data-priority="1">Voted For</th>
           <th>Votes</th>
         </tr>
       </thead>
@@ -201,7 +201,7 @@
   var $current_game, $current_player, $last_phase;
 
   function change_to_new() {
-    $("h1").text($current_player.name + ' -> Game ' + $current_game.id)
+    $("h1").text($current_game.id + ' : ' + $current_player.name)
     $.mobile.changePage("#play", { transition: "slideup", changeHash: false });
   }
 
