@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>One night werewolf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/werewolf.css"/>
+</head>
+<body>
+  <div class="main col-md-6 col-md-offset-3">
+    <div class="alert alert-danger" id="errors"></div>
+      <div id="login-screen">
+        <!-- Init instructions -->
+        <p class="lead" id='intro-message'>
+          Welcome to one night werewolf.
+        </p>
+
+        <p id='intro-instructions'>
+          Please enter your name below and click Join or hit Enter.
+        </p>
+        <!-- /Init instructions -->
+
+        <!-- Player Lobby -->
+        <div id='player-lobby' class='hidden'>
+          <p>
+            Players in the lobby:
+          </p>
+
+          <ul id='player-list'></ul>
+        </div>
+        <!-- /Player Lobby -->
+
+        <!-- Games Lobby -->
+        <div id='games-lobby' class='hidden'>
+          <p>
+            Available games:
+          </p>
+
+          <ul id='games-list'></ul>
+        </div>
+        <!-- /Games Lobby -->
+
+        <!-- Game session Lobby -->
+        <div id='game-lobby' class='hidden'>
+          <p>
+            Players in this game:
+          </p>
+
+          <ul id='game-list'></ul>
+        </div>
+        <!-- /Game session Lobby -->
+
+        <!-- Name form -->
+        <form class="form-inline" id="nameForm">
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" placeholder="Your name" id="name">
+          </div>
+        </form>
+        <!-- /Name form -->
+
+        <!-- Create game button -->
+        <form id="newGameForm" class="form-inline hidden">
+          <input type="submit" name="send" id="new-game" value="Create new game"
+                class="btn btn-success btn-lg">
+        </form>
+        <!-- /Create game button -->
+
+        <!-- Start game button -->
+        <form id="startGameForm" class="form-inline hidden">
+          <input type="submit" name="send" id="start-game" value="Start game"
+                class="btn btn-success btn-lg">
+        </form>
+        <!-- /Start game button -->
+
+        <!-- Night phase -->
+        <div role="main" class="ui-content half-width hidden" id='night-phase'>
+          <h2>Night Phase</h2>
+          <p id="player-role"></p>
+
+          <form id="play_action">
+            <div class="role-seer hidden">
+              <label for="look_at_select">Look At</label>
+              <select id="look_at_select" name="look_at" class="name-options"></select>
+              <button class='do-night-action'>Look</button>
+            </div>
+            <div class="role-robber hidden">
+              <label for="look_at_select">Rob</label>
+              <select id="rob_select" name="rob" class="name-options"></select>
+              <button class='do-night-action'>Steal</button>
+            </div>
+            <div class="role-troublemaker hidden">
+              <label for="troublemaker_swap1">Swap</label>
+              <select id="troublemaker_swap1" name="swap1" class="name-options"></select>
+              <select id="troublemaker_swap2" name="swap2" class="name-options"></select>
+              <button class='do-night-action'>Swap</button>
+            </div>
+            <div class="role-werewolf role-minion hidden">
+              <label for="puppy_crash">Puppy Crash on</label>
+              <select id="puppy_crash" name="puppy-crash" class="name-options"></select>
+              <button class='do-night-action'>Kiss</button>
+            </div>
+            <div class="role-tanner hidden">
+              <label for="kill_him">Course of Misery</label>
+              <select id="kill_him" name="kill_him" class="name-options"></select>
+              <button class='do-night-action'>Bastard</button>
+            </div>
+            <div class="role-mason hidden">
+              <label for="mason_him">Consider for Masonary</label>
+              <select id="mason_him" name="mason_him" class="name-options"></select>
+              <button class='do-night-action'>Masonize</button>
+            </div>
+            <div class="role-drunk hidden">
+              <label for="drunk_him">Select Sponser</label>
+              <select id="drunk_him" name="drunk_him" class="name-options"></select>
+              <button class='do-night-action'>Help me</button>
+            </div>
+            <div class="role-insomanic hidden">
+              <label for="insomanick_him">Find a Dealer</label>
+              <select id="insomanick_him" name="insomanick_him" class="name-options"></select>
+              <button class='do-night-action'>Buy</button>
+            </div>
+            <div class="role-hunter hidden">
+              <label for="hunter_him">Needs to die</label>
+              <select id="hunter_him" name="hunter_him" class="name-options"></select>
+              <button class='do-night-action'>Shoot</button>
+            </div>
+            <div class="role-villager hidden">
+              <label for="hunter_villager">Your Friend</label>
+              <select id="hunter_villager" name="hunter_villager" class="name-options"></select>
+              <button class='do-night-action'>Befriend</button>
+            </div>
+          </form>
+
+          <div id='voted-message' class='hidden'>
+            Thanks for voting. Now you've got to wait for those other assholes.
+          </div>
+        </div>
+        <!-- /Night phase -->
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src='js/game.js'></script>
+</body>
+</html>
